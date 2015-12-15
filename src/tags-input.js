@@ -299,6 +299,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     keydown: function($event) {
                         events.trigger('input-keydown', $event);
                     },
+                    click: function($event) {
+                        events.trigger('input-click', $event);
+                    },
                     focus: function() {
                         if (scope.hasFocus) {
                             return;
@@ -368,6 +371,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 .on('input-change', function() {
                     tagList.clearSelection();
                     scope.newTag.invalid = null;
+                })
+                .on('click', function() {
+                    element.triggerHandler('click');
                 })
                 .on('input-focus', function() {
                     element.triggerHandler('focus');

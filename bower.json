@@ -1,0 +1,12 @@
+{
+  "name": "ngTagsInput",
+  "main": [
+    "build/ng-tags-input.js",
+    "build/ng-tags-input.min.js",
+    "build/ng-tags-input.css",
+    "build/ng-tags-input.min.css",
+    "build/ng-tags-input.bootstrap.css",
+    "build/ng-tags-input.bootstrap.min.css"
+  ],
+  "homepage": "https://github.com/rafw87/ngTagsInput"
+}

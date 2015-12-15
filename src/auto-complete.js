@@ -25,6 +25,8 @@
  *    becomes empty. The $query variable will be passed to the expression as an empty string.
  * @param {boolean=} [loadOnFocus=false] Flag indicating that the source option will be evaluated when the input element
  *    gains focus. The current input value is available as $query.
+ * @param {boolean=} [toggleOnClick=false] Flag indicating that the source option will be evaluated when the input content
+ *    is clicked
  * @param {boolean=} [selectFirstMatch=true] Flag indicating that the first match will be automatically selected once
  *    the suggestion list is shown.
  */
@@ -146,6 +148,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 loadOnDownArrow: [Boolean, false],
                 loadOnEmpty: [Boolean, false],
                 loadOnFocus: [Boolean, false],
+                toggleOnClick: [Boolean, false],
                 selectFirstMatch: [Boolean, true],
                 displayProperty: [String, '']
             });
@@ -215,6 +218,16 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                     var value = tagsInput.getCurrentTagText();
                     if (options.loadOnFocus && shouldLoadSuggestions(value)) {
                         suggestionList.load(value, tagsInput.getTags());
+                    }
+                })
+                .on('input-click', function() {
+                    if (options.toggleOnClick) {
+                        var value = tagsInput.getCurrentTagText();
+                        if (!suggestionList.visible) {
+                            suggestionList.load(value, tagsInput.getTags());
+                        } else {
+                            suggestionList.reset();
+                        }
                     }
                 })
                 .on('input-keydown', function(event) {
