@@ -8,5 +8,9 @@
     "build/ng-tags-input.bootstrap.css",
     "build/ng-tags-input.bootstrap.min.css"
   ],
-  "homepage": "https://github.com/rafw87/ngTagsInput"
+  "homepage": "https://github.com/rafw87/ngTagsInput",
+  "ignore": [
+    "**/.*",
+    "!build"
+  ]
 }
