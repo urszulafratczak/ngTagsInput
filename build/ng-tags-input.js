@@ -338,12 +338,13 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                         events.trigger('input-click', $event);
                     },
                     focus: function() {
-                        if (scope.hasFocus) {
-                            return;
+                        if (!scope.hasFocus) {
+                          scope.hasFocus = false;
+                          events.trigger('input-blur');
                         }
-
                         scope.hasFocus = true;
                         events.trigger('input-focus');
+
                     },
                     blur: function() {
                         $timeout(function() {
@@ -718,9 +719,9 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     tagsInput.addTag(angular.copy(suggestionList.selected));
                     suggestionList.reset();
                     tagsInput.focusInput();
-
                     added = true;
                 }
+
                 return added;
             };
 
@@ -730,10 +731,11 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
 
             tagsInput
                 .on('tag-added tag-removed invalid-tag input-blur', function() {
+                    scope.hasFocus = !scope.hasFocus;
                     suggestionList.reset();
                 })
                 .on('input-change', function(value) {
-                    if (shouldLoadSuggestions(value)) {
+                    if (shouldLoadSuggestions(value) && !scope.hasFocus) {
                         suggestionList.load(value, tagsInput.getTags());
                     }
                     else {
@@ -741,15 +743,23 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     }
                 })
                 .on('input-focus', function() {
-                    var value = tagsInput.getCurrentTagText();
-                    if (options.loadOnFocus && shouldLoadSuggestions(value)) {
+                    if(options.loadOnFocus && shouldLoadSuggestions(value)) {
+                      var value = tagsInput.getCurrentTagText();
+                      if (!suggestionList.visible && !scope.hasFocus) {
                         suggestionList.load(value, tagsInput.getTags());
+                      }else {
+                        suggestionList.reset();
+                        scope.hasFocus = !scope.hasFocus;
+                      }
                     }
+                })
+                .on('input-blur', function() {
+                   suggestionList.reset();
                 })
                 .on('input-click', function() {
                     if (options.toggleOnClick) {
                         var value = tagsInput.getCurrentTagText();
-                        if (!suggestionList.visible) {
+                        if (!suggestionList.visible && !scope.hasFocus) {
                             suggestionList.load(value, tagsInput.getTags());
                         } else {
                             suggestionList.reset();
