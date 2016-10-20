@@ -344,8 +344,6 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
 
                     },
                     focus: function() {
-                        console.log("Jestem w focus i input jest: ");
-                        console.log(scope.hasFocus);
                         if (!scope.hasFocus) {
                           scope.hasFocus = false;
                           events.trigger('input-blur');
