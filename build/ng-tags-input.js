@@ -335,9 +335,17 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                         events.trigger('input-keydown', $event);
                     },
                     click: function($event) {
-                        events.trigger('input-click', $event);
+                      if (!scope.hasFocus) {
+                        scope.hasFocus = false;
+                        events.trigger('input-blur');
+                      }
+                      scope.hasFocus = true;
+                      events.trigger('input-click', $event);;
+
                     },
                     focus: function() {
+                        console.log("Jestem w focus i input jest: ");
+                        console.log(scope.hasFocus);
                         if (!scope.hasFocus) {
                           scope.hasFocus = false;
                           events.trigger('input-blur');
@@ -731,7 +739,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
 
             tagsInput
                 .on('tag-added tag-removed invalid-tag input-blur', function() {
-                    scope.hasFocus = !scope.hasFocus;
+                    scope.hasFocus = false;
                     suggestionList.reset();
                 })
                 .on('input-change', function(value) {
