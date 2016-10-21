@@ -749,14 +749,14 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     }
                 })
                 .on('input-focus', function() {
+                    var value = tagsInput.getCurrentTagText();
                     if(options.loadOnFocus && shouldLoadSuggestions(value)) {
-                      var value = tagsInput.getCurrentTagText();
-                      if (!suggestionList.visible && !scope.hasFocus) {
+                      if (!suggestionList.visible || !scope.hasFocus) {
                         suggestionList.load(value, tagsInput.getTags());
                       }else {
                         suggestionList.reset();
-                        scope.hasFocus = !scope.hasFocus;
                       }
+                      scope.hasFocus = !scope.hasFocus;
                     }
                 })
                 .on('input-blur', function() {
@@ -765,11 +765,12 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 .on('input-click', function() {
                     if (options.toggleOnClick) {
                         var value = tagsInput.getCurrentTagText();
-                        if (!suggestionList.visible && !scope.hasFocus) {
+                        if (!suggestionList.visible) {
                             suggestionList.load(value, tagsInput.getTags());
                         } else {
                             suggestionList.reset();
                         }
+                        scope.hasFocus = !scope.hasFocus;
                     }
                 })
                 .on('input-keydown', function(event) {
