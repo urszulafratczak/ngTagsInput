@@ -797,6 +797,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                         }
                         else if (key === KEYS.enter || key === KEYS.tab) {
                             handled = scope.addSuggestion();
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
                         }
                     }
                     else {
