@@ -790,11 +790,10 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                         }
                     }
                     else {
-                        suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
-                        //if (key === KEYS.down && scope.options.loadOnDownArrow) {
-                        //    suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
-                        //    handled = true;
-                        //}
+                        if (key === KEYS.down && scope.options.loadOnDownArrow) {
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            handled = true;
+                        }
                     }
 
                     if (handled) {
