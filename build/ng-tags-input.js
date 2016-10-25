@@ -731,7 +731,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     suggestionList.reset();
                 })
                 .on('input-change', function(value) {
-                    if (shouldLoadSuggestions(value) && !suggestionList.visible) {
+                    if (shouldLoadSuggestions(value) || !suggestionList.visible) {
                         suggestionList.load(value, tagsInput.getTags());
                     }
                     else {
@@ -790,10 +790,11 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                         }
                     }
                     else {
-                        if (key === KEYS.down && scope.options.loadOnDownArrow) {
-                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
-                            handled = true;
-                        }
+                        suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                        //if (key === KEYS.down && scope.options.loadOnDownArrow) {
+                        //    suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                        //    handled = true;
+                        //}
                     }
 
                     if (handled) {
