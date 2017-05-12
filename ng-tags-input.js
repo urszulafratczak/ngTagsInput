@@ -335,22 +335,12 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                         events.trigger('input-keydown', $event);
                     },
                     click: function($event) {
-                      if (!scope.hasFocus) {
-                        scope.hasFocus = false;
-                        events.trigger('input-blur');
-                      }
-                      scope.hasFocus = true;
-                      events.trigger('input-click', $event);;
-
+                        scope.hasFocus = true;
+                        events.trigger('input-click', $event);
                     },
                     focus: function() {
-                        if (!scope.hasFocus) {
-                          scope.hasFocus = false;
-                          events.trigger('input-blur');
-                        }
                         scope.hasFocus = true;
                         events.trigger('input-focus');
-
                     },
                     blur: function() {
                         $timeout(function() {
@@ -741,7 +731,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     suggestionList.reset();
                 })
                 .on('input-change', function(value) {
-                    if (shouldLoadSuggestions(value) && !scope.hasFocus) {
+                    if (shouldLoadSuggestions(value) || !suggestionList.visible) {
                         suggestionList.load(value, tagsInput.getTags());
                     }
                     else {
@@ -749,23 +739,23 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     }
                 })
                 .on('input-focus', function() {
+                    var value = tagsInput.getCurrentTagText();
                     if(options.loadOnFocus && shouldLoadSuggestions(value)) {
-                      var value = tagsInput.getCurrentTagText();
-                      if (!suggestionList.visible && !scope.hasFocus) {
+                      if (!suggestionList.visible ) {
                         suggestionList.load(value, tagsInput.getTags());
                       }else {
                         suggestionList.reset();
-                        scope.hasFocus = !scope.hasFocus;
                       }
                     }
                 })
                 .on('input-blur', function() {
+                   scope.hasFocus = false;
                    suggestionList.reset();
                 })
                 .on('input-click', function() {
                     if (options.toggleOnClick) {
                         var value = tagsInput.getCurrentTagText();
-                        if (!suggestionList.visible && !scope.hasFocus) {
+                        if (!suggestionList.visible) {
                             suggestionList.load(value, tagsInput.getTags());
                         } else {
                             suggestionList.reset();
@@ -794,8 +784,11 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                             suggestionList.reset();
                             handled = true;
                         }
-                        else if (key === KEYS.enter || key === KEYS.tab) {
+                        else if (key === KEYS.enter) {
                             handled = scope.addSuggestion();
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                        } else if (key === KEYS.tab) {
+                          suggestionList.reset();
                         }
                     }
                     else {
