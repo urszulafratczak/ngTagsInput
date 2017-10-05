@@ -191,6 +191,12 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 addFromAutocompleteOnly: [Boolean, false],
                 spellcheck: [Boolean, true]
             });
+  
+            $scope.$watch(function(){
+                return $element.attr("placeholder");
+            },function(newplaceholder){
+                $scope.options.placeholder = newplaceholder;
+            });
 
             $scope.tagList = new TagList($scope.options, $scope.events,
                 tiUtil.handleUndefinedResult($scope.onTagAdding, true),
@@ -300,13 +306,10 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                         events.trigger('input-keydown', $event);
                     },
                     click: function($event) {
+                        scope.hasFocus = true;
                         events.trigger('input-click', $event);
                     },
                     focus: function() {
-                        if (scope.hasFocus) {
-                            return;
-                        }
-
                         scope.hasFocus = true;
                         events.trigger('input-focus');
                     },

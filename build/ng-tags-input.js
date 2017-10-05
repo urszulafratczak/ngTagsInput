@@ -2,10 +2,10 @@
  * ngTagsInput v3.0.0
  * http://mbenford.github.io/ngTagsInput
  *
- * Copyright (c) 2013-2015 Michael Benford
+ * Copyright (c) 2013-2017 Michael Benford
  * License: MIT
  *
- * Generated at 2015-12-15 15:57:52 +0100
+ * Generated at 2017-10-05 11:42:55 +0200
  */
 (function() {
 'use strict';
@@ -225,6 +225,12 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
                 spellcheck: [Boolean, true]
+            });
+  
+            $scope.$watch(function(){
+                return $element.attr("placeholder");
+            },function(newplaceholder){
+                $scope.options.placeholder = newplaceholder;
             });
 
             $scope.tagList = new TagList($scope.options, $scope.events,
@@ -717,7 +723,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     tagsInput.focusInput();
                     added = true;
                 }
-
+                
                 return added;
             };
 
@@ -740,7 +746,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 })
                 .on('input-focus', function() {
                     var value = tagsInput.getCurrentTagText();
-                    if(options.loadOnFocus && shouldLoadSuggestions(value)) {
+                    if (options.loadOnFocus && shouldLoadSuggestions(value)) {
                       if (!suggestionList.visible ) {
                         suggestionList.load(value, tagsInput.getTags());
                       }else {
@@ -749,8 +755,8 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     }
                 })
                 .on('input-blur', function() {
-                   scope.hasFocus = false;
-                   suggestionList.reset();
+                    scope.hasFocus = false;
+                    suggestionList.reset();
                 })
                 .on('input-click', function() {
                     if (options.toggleOnClick) {

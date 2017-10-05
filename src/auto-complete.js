@@ -192,9 +192,9 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                     tagsInput.addTag(angular.copy(suggestionList.selected));
                     suggestionList.reset();
                     tagsInput.focusInput();
-
                     added = true;
                 }
+                
                 return added;
             };
 
@@ -204,10 +204,11 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
 
             tagsInput
                 .on('tag-added tag-removed invalid-tag input-blur', function() {
+                    scope.hasFocus = false;
                     suggestionList.reset();
                 })
                 .on('input-change', function(value) {
-                    if (shouldLoadSuggestions(value)) {
+                    if (shouldLoadSuggestions(value) || !suggestionList.visible) {
                         suggestionList.load(value, tagsInput.getTags());
                     }
                     else {
@@ -217,8 +218,16 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 .on('input-focus', function() {
                     var value = tagsInput.getCurrentTagText();
                     if (options.loadOnFocus && shouldLoadSuggestions(value)) {
+                      if (!suggestionList.visible ) {
                         suggestionList.load(value, tagsInput.getTags());
+                      }else {
+                        suggestionList.reset();
+                      }
                     }
+                })
+                .on('input-blur', function() {
+                    scope.hasFocus = false;
+                    suggestionList.reset();
                 })
                 .on('input-click', function() {
                     if (options.toggleOnClick) {
@@ -254,6 +263,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                         }
                         else if (key === KEYS.enter) {
                             handled = scope.addSuggestion();
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
                         } else if (key === KEYS.tab) {
                             suggestionList.reset();
                         }
