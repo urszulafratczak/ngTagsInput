@@ -2,14 +2,12 @@
  * ngTagsInput v3.0.0
  * http://mbenford.github.io/ngTagsInput
  *
- * Copyright (c) 2013-2017 Michael Benford
+ * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2017-10-05 11:42:55 +0200
+ * Generated at 2018-05-02 10:56:29 +0200
  */
 (function() {
-'use strict';
-
 'use strict';
 
 var KEYS = {
@@ -29,11 +27,7 @@ var KEYS = {
 var MAX_SAFE_INTEGER = 9007199254740991;
 var SUPPORTED_INPUT_TYPES = ['text', 'email', 'url'];
 
-'use strict';
-
 var tagsInput = angular.module('ngTagsInput', []);
-
-'use strict';
 
 /**
  * @ngdoc directive
@@ -64,6 +58,7 @@ var tagsInput = angular.module('ngTagsInput', []);
  * @param {boolean=} [addOnComma=true] Flag indicating that a new tag will be added on pressing the COMMA key.
  * @param {boolean=} [addOnBlur=true] Flag indicating that a new tag will be added when the input field loses focus.
  * @param {boolean=} [addOnPaste=false] Flag indicating that the text pasted into the input field will be split into tags.
+ * @param {boolean=} [displayValueAsHtml=false] Flag indicating that the text pastes as labels will be displayed as HTML.
  * @param {string=} [pasteSplitPattern=,] Regular expression used to split the pasted text into tags.
  * @param {boolean=} [replaceSpacesWithDashes=true] Flag indicating that spaces will be replaced with dashes.
  * @param {string=} [allowedTagsPattern=.+] Regular expression that determines whether a new tag is valid.
@@ -224,9 +219,10 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                 keyProperty: [String, ''],
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
-                spellcheck: [Boolean, true]
+                spellcheck: [Boolean, true],
+                displayValueAsHtml: [Boolean, false]
             });
-  
+
             $scope.$watch(function(){
                 return $element.attr("placeholder");
             },function(newplaceholder){
@@ -489,8 +485,6 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
 }]);
 
 
-'use strict';
-
 /**
  * @ngdoc directive
  * @name tiTagItem
@@ -499,7 +493,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
  * @description
  * Represents a tag item. Used internally by the tagsInput directive.
  */
-tagsInput.directive('tiTagItem', ["tiUtil", function(tiUtil) {
+tagsInput.directive('tiTagItem', ["tiUtil", "$sce", function(tiUtil, $sce) {
     return {
         restrict: 'E',
         require: '^tagsInput',
@@ -513,7 +507,12 @@ tagsInput.directive('tiTagItem', ["tiUtil", function(tiUtil) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
-                return tiUtil.safeToString(scope.data[options.displayProperty]);
+                var textToDisplay = tiUtil.safeToString(scope.data[options.displayProperty]);
+                scope.displayValueAsHtml = options.displayValueAsHtml;
+                if(scope.displayValueAsHtml) {
+                    textToDisplay = $sce.trustAsHtml(textToDisplay);
+                }
+                return textToDisplay;
             };
             scope.$removeTag = function() {
                 tagsInput.removeTag(scope.$index);
@@ -526,8 +525,6 @@ tagsInput.directive('tiTagItem', ["tiUtil", function(tiUtil) {
     };
 }]);
 
-
-'use strict';
 
 /**
  * @ngdoc directive
@@ -819,8 +816,6 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
 }]);
 
 
-'use strict';
-
 /**
  * @ngdoc directive
  * @name tiAutocompleteMatch
@@ -856,8 +851,6 @@ tagsInput.directive('tiAutocompleteMatch', ["$sce", "tiUtil", function($sce, tiU
 }]);
 
 
-'use strict';
-
 /**
  * @ngdoc directive
  * @name tiTranscludeAppend
@@ -873,8 +866,6 @@ tagsInput.directive('tiTranscludeAppend', function() {
         });
     };
 });
-
-'use strict';
 
 /**
  * @ngdoc directive
@@ -931,8 +922,6 @@ tagsInput.directive('tiAutosize', ["tagsInputConfig", function(tagsInputConfig) 
     };
 }]);
 
-'use strict';
-
 /**
  * @ngdoc directive
  * @name tiBindAttrs
@@ -950,8 +939,6 @@ tagsInput.directive('tiBindAttrs', function() {
         }, true);
     };
 });
-
-'use strict';
 
 /**
  * @ngdoc service
@@ -1059,8 +1046,6 @@ tagsInput.provider('tagsInputConfig', function() {
     }];
 });
 
-
-'use strict';
 
 /***
  * @ngdoc service
@@ -1195,7 +1180,7 @@ tagsInput.run(["$templateCache", function($templateCache) {
 
 
   $templateCache.put('ngTagsInput/tag-item.html',
-    "<span ng-bind=\"$getDisplayText()\"></span> <a class=\"remove-button\" ng-click=\"$removeTag()\" ng-bind=\"::$$removeTagSymbol\"></a>"
+    "<span ng-bind-html=\"$getDisplayText()\" ng-if=\"displayValueAsHtml\"></span> <span ng-bind=\"$getDisplayText()\" ng-if=\"!displayValueAsHtml\"></span> <a class=\"remove-button\" ng-click=\"$removeTag()\" ng-bind=\"::$$removeTagSymbol\"></a>"
   );
 
 

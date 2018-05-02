@@ -29,6 +29,7 @@
  * @param {boolean=} [addOnComma=true] Flag indicating that a new tag will be added on pressing the COMMA key.
  * @param {boolean=} [addOnBlur=true] Flag indicating that a new tag will be added when the input field loses focus.
  * @param {boolean=} [addOnPaste=false] Flag indicating that the text pasted into the input field will be split into tags.
+ * @param {boolean=} [displayValueAsHtml=false] Flag indicating that the text pastes as labels will be displayed as HTML.
  * @param {string=} [pasteSplitPattern=,] Regular expression used to split the pasted text into tags.
  * @param {boolean=} [replaceSpacesWithDashes=true] Flag indicating that spaces will be replaced with dashes.
  * @param {string=} [allowedTagsPattern=.+] Regular expression that determines whether a new tag is valid.
@@ -189,9 +190,10 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 keyProperty: [String, ''],
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
-                spellcheck: [Boolean, true]
+                spellcheck: [Boolean, true],
+                displayValueAsHtml: [Boolean, false]
             });
-  
+
             $scope.$watch(function(){
                 return $element.attr("placeholder");
             },function(newplaceholder){

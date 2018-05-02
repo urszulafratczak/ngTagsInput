@@ -8,7 +8,7 @@
  * @description
  * Represents a tag item. Used internally by the tagsInput directive.
  */
-tagsInput.directive('tiTagItem', function(tiUtil) {
+tagsInput.directive('tiTagItem', function(tiUtil, $sce) {
     return {
         restrict: 'E',
         require: '^tagsInput',
@@ -22,7 +22,12 @@ tagsInput.directive('tiTagItem', function(tiUtil) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
-                return tiUtil.safeToString(scope.data[options.displayProperty]);
+                var textToDisplay = tiUtil.safeToString(scope.data[options.displayProperty]);
+                scope.displayValueAsHtml = options.displayValueAsHtml;
+                if(scope.displayValueAsHtml) {
+                    textToDisplay = $sce.trustAsHtml(textToDisplay);
+                }
+                return textToDisplay;
             };
             scope.$removeTag = function() {
                 tagsInput.removeTag(scope.$index);
