@@ -28,7 +28,12 @@ tagsInput.directive('tiAutocompleteMatch', function($sce, tiUtil) {
                 return $sce.trustAsHtml(text);
             };
             scope.$getDisplayText =  function() {
-                return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                if(scope.data[options.displayProperty] || scope.data[options.tagsInput.displayProperty]) {
+                    return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                } else {
+                    return '-';
+                }
+                
             };
         }
     };

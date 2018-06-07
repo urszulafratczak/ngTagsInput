@@ -22,7 +22,7 @@ tagsInput.directive('tiTagItem', function(tiUtil, $sce) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
-                var textToDisplay = tiUtil.safeToString(scope.data[options.displayProperty]);
+                var textToDisplay = scope.data[options.displayProperty] ? tiUtil.safeToString(scope.data[options.displayProperty]) : '-';
                 scope.displayValueAsHtml = options.displayValueAsHtml;
                 if(scope.displayValueAsHtml) {
                     textToDisplay = $sce.trustAsHtml(textToDisplay);

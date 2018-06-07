@@ -16,7 +16,7 @@
  * @param {string=} [text=NA] Assignable Angular expression for data-binding to the element's text.
  * @param {number=} tabindex Tab order of the control.
  * @param {string=} [placeholder=Add a tag] Placeholder text for the control.
- * @param {number=} [minLength=3] Minimum length for a new tag.
+ * @param {number=} [minLength=1] Minimum length for a new tag.
  * @param {number=} [maxLength=MAX_SAFE_INTEGER] Maximum length allowed for a new tag.
  * @param {number=} [minTags=0] Sets minTags validation error key if the number of tags added is less than minTags.
  * @param {number=} [maxTags=MAX_SAFE_INTEGER] Sets maxTags validation error key if the number of tags added is greater
@@ -53,7 +53,12 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
         var self = {}, getTagText, setTagText, tagIsValid;
 
         getTagText = function(tag) {
-            return tiUtil.safeToString(tag[options.displayProperty]);
+            if(tag[options.displayProperty]) {
+                return tiUtil.safeToString(tag[options.displayProperty]);
+            } else {
+                return '-';
+            }
+            
         };
 
         setTagText = function(tag, text) {
@@ -62,7 +67,6 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
 
         tagIsValid = function(tag) {
             var tagText = getTagText(tag);
-
             return tagText &&
                    tagText.length >= options.minLength &&
                    tagText.length <= options.maxLength &&
@@ -174,7 +178,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 tabindex: [Number, null],
                 removeTagSymbol: [String, String.fromCharCode(215)],
                 replaceSpacesWithDashes: [Boolean, true],
-                minLength: [Number, 3],
+                minLength: [Number, 1],
                 maxLength: [Number, MAX_SAFE_INTEGER],
                 addOnEnter: [Boolean, true],
                 addOnSpace: [Boolean, false],

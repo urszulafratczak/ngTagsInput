@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2018-05-02 10:56:29 +0200
+ * Generated at 2018-06-07 09:10:43 +0200
  */
 (function() {
 'use strict';
@@ -45,7 +45,7 @@ var tagsInput = angular.module('ngTagsInput', []);
  * @param {string=} [text=NA] Assignable Angular expression for data-binding to the element's text.
  * @param {number=} tabindex Tab order of the control.
  * @param {string=} [placeholder=Add a tag] Placeholder text for the control.
- * @param {number=} [minLength=3] Minimum length for a new tag.
+ * @param {number=} [minLength=1] Minimum length for a new tag.
  * @param {number=} [maxLength=MAX_SAFE_INTEGER] Maximum length allowed for a new tag.
  * @param {number=} [minTags=0] Sets minTags validation error key if the number of tags added is less than minTags.
  * @param {number=} [maxTags=MAX_SAFE_INTEGER] Sets maxTags validation error key if the number of tags added is greater
@@ -82,7 +82,12 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
         var self = {}, getTagText, setTagText, tagIsValid;
 
         getTagText = function(tag) {
-            return tiUtil.safeToString(tag[options.displayProperty]);
+            if(tag[options.displayProperty]) {
+                return tiUtil.safeToString(tag[options.displayProperty]);
+            } else {
+                return '-';
+            }
+            
         };
 
         setTagText = function(tag, text) {
@@ -91,7 +96,6 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
 
         tagIsValid = function(tag) {
             var tagText = getTagText(tag);
-
             return tagText &&
                    tagText.length >= options.minLength &&
                    tagText.length <= options.maxLength &&
@@ -203,7 +207,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                 tabindex: [Number, null],
                 removeTagSymbol: [String, String.fromCharCode(215)],
                 replaceSpacesWithDashes: [Boolean, true],
-                minLength: [Number, 3],
+                minLength: [Number, 1],
                 maxLength: [Number, MAX_SAFE_INTEGER],
                 addOnEnter: [Boolean, true],
                 addOnSpace: [Boolean, false],
@@ -507,7 +511,7 @@ tagsInput.directive('tiTagItem', ["tiUtil", "$sce", function(tiUtil, $sce) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
-                var textToDisplay = tiUtil.safeToString(scope.data[options.displayProperty]);
+                var textToDisplay = scope.data[options.displayProperty] ? tiUtil.safeToString(scope.data[options.displayProperty]) : '-';
                 scope.displayValueAsHtml = options.displayValueAsHtml;
                 if(scope.displayValueAsHtml) {
                     textToDisplay = $sce.trustAsHtml(textToDisplay);
@@ -844,7 +848,12 @@ tagsInput.directive('tiAutocompleteMatch', ["$sce", "tiUtil", function($sce, tiU
                 return $sce.trustAsHtml(text);
             };
             scope.$getDisplayText =  function() {
-                return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                if(scope.data[options.displayProperty] || scope.data[options.tagsInput.displayProperty]) {
+                    return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                } else {
+                    return '-';
+                }
+                
             };
         }
     };
