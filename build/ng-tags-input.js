@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2018-06-07 09:10:43 +0200
+ * Generated at 2018-06-11 14:07:17 +0200
  */
 (function() {
 'use strict';
@@ -1119,7 +1119,7 @@ tagsInput.factory('tiUtil', ["$timeout", function($timeout) {
             return str.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
         }
 
-        str = self.encodeHTML(str);
+        str = self.safeToString(str);
         value = self.encodeHTML(value);
 
         var expression = new RegExp('&[^;]+;|' + escapeRegexChars(value), 'gi');

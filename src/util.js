@@ -63,7 +63,7 @@ tagsInput.factory('tiUtil', function($timeout) {
             return str.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
         }
 
-        str = self.encodeHTML(str);
+        str = self.safeToString(str);
         value = self.encodeHTML(value);
 
         var expression = new RegExp('&[^;]+;|' + escapeRegexChars(value), 'gi');
