@@ -53,8 +53,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
         var self = {}, getTagText, setTagText, tagIsValid;
 
         getTagText = function(tag) {
-            if(tag[options.displayProperty]) {
-                return tiUtil.safeToString(tag[options.displayProperty]);
+            var tagDisplayProperty = tiUtil.getNestedObjectProperty(options.displayProperty, tag);
+            if(tagDisplayProperty) {
+                return tiUtil.safeToString(tagDisplayProperty);
             } else {
                 return '-';
             }

@@ -120,5 +120,18 @@ tagsInput.factory('tiUtil', function($timeout) {
         };
     };
 
+    self.getNestedObjectProperty = function(propertyName, parentObject) {
+        var parts = propertyName.split( "." ),
+        length = parts.length,
+        i,
+        property = parentObject || this;
+    
+        for ( i = 0; i < length; i++ ) {
+            property = property[parts[i]] ? property[parts[i]] : '-';
+        }
+    
+      return property;
+    }
+
     return self;
 });

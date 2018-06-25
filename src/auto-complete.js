@@ -199,7 +199,9 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
             };
 
             scope.track = function(item) {
-                return item[options.tagsInput.keyProperty || options.tagsInput.displayProperty];
+                return options.tagsInput.keyProperty 
+                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item) 
+                    : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, item);
             };
 
             tagsInput

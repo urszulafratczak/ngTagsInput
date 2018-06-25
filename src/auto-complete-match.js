@@ -28,8 +28,11 @@ tagsInput.directive('tiAutocompleteMatch', function($sce, tiUtil) {
                 return $sce.trustAsHtml(text);
             };
             scope.$getDisplayText =  function() {
-                if(scope.data[options.displayProperty] || scope.data[options.tagsInput.displayProperty]) {
-                    return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                var tagDisplayProperty = options.displayProperty 
+                    ? tiUtil.getNestedObjectProperty(options.displayProperty, scope.data)
+                    : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, scope.data);
+                if(tagDisplayProperty) {
+                    return tiUtil.safeToString(tagDisplayProperty);
                 } else {
                     return '-';
                 }

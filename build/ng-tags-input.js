@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2018-06-11 14:07:17 +0200
+ * Generated at 2018-06-25 14:32:23 +0200
  */
 (function() {
 'use strict';
@@ -82,8 +82,9 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
         var self = {}, getTagText, setTagText, tagIsValid;
 
         getTagText = function(tag) {
-            if(tag[options.displayProperty]) {
-                return tiUtil.safeToString(tag[options.displayProperty]);
+            var tagDisplayProperty = tiUtil.getNestedObjectProperty(options.displayProperty, tag);
+            if(tagDisplayProperty) {
+                return tiUtil.safeToString(tagDisplayProperty);
             } else {
                 return '-';
             }
@@ -511,7 +512,9 @@ tagsInput.directive('tiTagItem', ["tiUtil", "$sce", function(tiUtil, $sce) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
+                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
                 var textToDisplay = scope.data[options.displayProperty] ? tiUtil.safeToString(scope.data[options.displayProperty]) : '-';
+                console.log(textToDisplay);
                 scope.displayValueAsHtml = options.displayValueAsHtml;
                 if(scope.displayValueAsHtml) {
                     textToDisplay = $sce.trustAsHtml(textToDisplay);
@@ -682,15 +685,20 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 selectFirstMatch: [Boolean, true],
                 displayProperty: [String, '']
             });
-
+            console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
+            console.log($scope.source);
             $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events);
 
             this.registerAutocompleteMatch = function() {
                 return {
                     getOptions: function() {
+                        console.log('BBBBBBBBBBBBBBBBBBBBB');
+                        console.log($scope.options);
                         return $scope.options;
                     },
                     getQuery: function() {
+                        console.log("getQuery");
+                        console.log($scope.suggestionList.query);
                         return $scope.suggestionList.query;
                     }
                 };
@@ -729,7 +737,10 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
             };
 
             scope.track = function(item) {
-                return item[options.tagsInput.keyProperty || options.tagsInput.displayProperty];
+                console.log('trackkkktrackkkkkkkktrackkkkkkkkktrackkkkkkkk');
+                return options.tagsInput.keyProperty 
+                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item) 
+                    : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, item);
             };
 
             tagsInput
@@ -843,13 +854,21 @@ tagsInput.directive('tiAutocompleteMatch', ["$sce", "tiUtil", function($sce, tiU
 
             scope.$highlight = function(text) {
                 if (options.highlightMatchedText) {
+                    console.log('highlight');
+                    console.log(text);
+                    console.log(autoComplete.getQuery());
                     text = tiUtil.safeHighlight(text, autoComplete.getQuery());
                 }
+                console.log('What text is here??????????');
+                console.log(text);
                 return $sce.trustAsHtml(text);
             };
             scope.$getDisplayText =  function() {
-                if(scope.data[options.displayProperty] || scope.data[options.tagsInput.displayProperty]) {
-                    return tiUtil.safeToString(scope.data[options.displayProperty || options.tagsInput.displayProperty]);
+                var tagDisplayProperty = options.displayProperty 
+                    ? tiUtil.getNestedObjectProperty(options.displayProperty, scope.data)
+                    : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, scope.data);
+                if(tagDisplayProperty) {
+                    return tiUtil.safeToString(tagDisplayProperty);
                 } else {
                     return '-';
                 }
@@ -1111,6 +1130,9 @@ tagsInput.factory('tiUtil', ["$timeout", function($timeout) {
     };
 
     self.safeHighlight = function(str, value) {
+        console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
+        console.log(str);
+        console.log(value);
         if (!value) {
             return str;
         }
@@ -1175,6 +1197,19 @@ tagsInput.factory('tiUtil', ["$timeout", function($timeout) {
             }
         };
     };
+
+    self.getNestedObjectProperty = function(propertyName, parentObject) {
+        var parts = propertyName.split( "." ),
+        length = parts.length,
+        i,
+        property = parentObject || this;
+    
+        for ( i = 0; i < length; i++ ) {
+            property = property[parts[i]] ? property[parts[i]] : '-';
+        }
+    
+      return property;
+    }
 
     return self;
 }]);
