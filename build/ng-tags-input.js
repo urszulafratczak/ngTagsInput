@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2018-06-25 14:32:23 +0200
+ * Generated at 2018-06-27 11:26:51 +0200
  */
 (function() {
 'use strict';
@@ -512,9 +512,9 @@ tagsInput.directive('tiTagItem', ["tiUtil", "$sce", function(tiUtil, $sce) {
             scope.$$removeTagSymbol = options.removeTagSymbol;
 
             scope.$getDisplayText = function() {
-                console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa');
-                var textToDisplay = scope.data[options.displayProperty] ? tiUtil.safeToString(scope.data[options.displayProperty]) : '-';
-                console.log(textToDisplay);
+                var textToDisplay = scope.data[options.displayProperty]
+                    ? tiUtil.safeToString(scope.data[options.displayProperty])
+                    : '-';
                 scope.displayValueAsHtml = options.displayValueAsHtml;
                 if(scope.displayValueAsHtml) {
                     textToDisplay = $sce.trustAsHtml(textToDisplay);
@@ -685,20 +685,15 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 selectFirstMatch: [Boolean, true],
                 displayProperty: [String, '']
             });
-            console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
-            console.log($scope.source);
+
             $scope.suggestionList = new SuggestionList($scope.source, $scope.options, $scope.events);
 
             this.registerAutocompleteMatch = function() {
                 return {
                     getOptions: function() {
-                        console.log('BBBBBBBBBBBBBBBBBBBBB');
-                        console.log($scope.options);
                         return $scope.options;
                     },
                     getQuery: function() {
-                        console.log("getQuery");
-                        console.log($scope.suggestionList.query);
                         return $scope.suggestionList.query;
                     }
                 };
@@ -737,7 +732,6 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
             };
 
             scope.track = function(item) {
-                console.log('trackkkktrackkkkkkkktrackkkkkkkkktrackkkkkkkk');
                 return options.tagsInput.keyProperty 
                     ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item) 
                     : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, item);
@@ -854,13 +848,8 @@ tagsInput.directive('tiAutocompleteMatch', ["$sce", "tiUtil", function($sce, tiU
 
             scope.$highlight = function(text) {
                 if (options.highlightMatchedText) {
-                    console.log('highlight');
-                    console.log(text);
-                    console.log(autoComplete.getQuery());
                     text = tiUtil.safeHighlight(text, autoComplete.getQuery());
                 }
-                console.log('What text is here??????????');
-                console.log(text);
                 return $sce.trustAsHtml(text);
             };
             scope.$getDisplayText =  function() {
@@ -1130,9 +1119,6 @@ tagsInput.factory('tiUtil', ["$timeout", function($timeout) {
     };
 
     self.safeHighlight = function(str, value) {
-        console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
-        console.log(str);
-        console.log(value);
         if (!value) {
             return str;
         }
