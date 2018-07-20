@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2018 Michael Benford
  * License: MIT
  *
- * Generated at 2018-06-27 11:26:51 +0200
+ * Generated at 2018-07-20 13:42:32 +0200
  */
 (function() {
 'use strict';
@@ -88,7 +88,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
             } else {
                 return '-';
             }
-            
+
         };
 
         setTagText = function(tag, text) {
@@ -181,6 +181,8 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
     function validateType(type) {
         return SUPPORTED_INPUT_TYPES.indexOf(type) !== -1;
     }
+
+    var _lastFocus = null;
 
     return {
         restrict: 'E',
@@ -277,6 +279,8 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                     }
                 };
             };
+
+            this.hasFocus = function () { return $scope.hasFocus; };
         }],
         link: function(scope, element, attrs, ngModelCtrl) {
             var hotkeys = [KEYS.enter, KEYS.comma, KEYS.space, KEYS.backspace, KEYS.delete, KEYS.left, KEYS.right],
@@ -342,11 +346,15 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
                         events.trigger('input-keydown', $event);
                     },
                     click: function($event) {
+                        if(_lastFocus) _lastFocus.hasFocus = false;
                         scope.hasFocus = true;
+                        _lastFocus = scope;
                         events.trigger('input-click', $event);
                     },
                     focus: function() {
+                        if(_lastFocus) _lastFocus.hasFocus = false;
                         scope.hasFocus = true;
+                        _lastFocus = scope;
                         events.trigger('input-focus');
                     },
                     blur: function() {
@@ -357,6 +365,7 @@ tagsInput.directive('tagsInput', ["$timeout", "$document", "$window", "tagsInput
 
                             if (lostFocusToBrowserWindow || !lostFocusToChildElement) {
                                 scope.hasFocus = false;
+                                _lastFocus = null;
                                 events.trigger('input-blur');
                             }
                         });
@@ -601,7 +610,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
             }
             self.visible = true;
         };
-        self.load = tiUtil.debounce(function(query, tags) {
+        self.load = tiUtil.debounce(function(query, tags, hasFocus) {
             self.query = query;
 
             var promise = $q.when(loadFn({ $query: query }));
@@ -616,7 +625,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 items = getDifference(items, tags);
                 self.items = items.slice(0, options.maxResultsToShow);
 
-                if (self.items.length > 0) {
+                if (hasFocus() && self.items.length > 0) {
                     self.show();
                 }
                 else {
@@ -727,13 +736,13 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     tagsInput.focusInput();
                     added = true;
                 }
-                
+
                 return added;
             };
 
             scope.track = function(item) {
-                return options.tagsInput.keyProperty 
-                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item) 
+                return options.tagsInput.keyProperty
+                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item)
                     : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, item);
             };
 
@@ -744,7 +753,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                 })
                 .on('input-change', function(value) {
                     if (shouldLoadSuggestions(value) || !suggestionList.visible) {
-                        suggestionList.load(value, tagsInput.getTags());
+                        suggestionList.load(value, tagsInput.getTags(),tagsInputCtrl.hasFocus);
                     }
                     else {
                         suggestionList.reset();
@@ -754,7 +763,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     var value = tagsInput.getCurrentTagText();
                     if (options.loadOnFocus && shouldLoadSuggestions(value)) {
                       if (!suggestionList.visible ) {
-                        suggestionList.load(value, tagsInput.getTags());
+                        suggestionList.load(value, tagsInput.getTags(), tagsInputCtrl.hasFocus);
                       }else {
                         suggestionList.reset();
                       }
@@ -768,7 +777,7 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                     if (options.toggleOnClick) {
                         var value = tagsInput.getCurrentTagText();
                         if (!suggestionList.visible) {
-                            suggestionList.load(value, tagsInput.getTags());
+                            suggestionList.load(value, tagsInput.getTags(),tagsInputCtrl.hasFocus);
                         } else {
                             suggestionList.reset();
                         }
@@ -798,14 +807,14 @@ tagsInput.directive('autoComplete', ["$document", "$timeout", "$sce", "$q", "tag
                         }
                         else if (key === KEYS.enter) {
                             handled = scope.addSuggestion();
-                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags(), tagsInputCtrl.hasFocus);
                         } else if (key === KEYS.tab) {
                             suggestionList.reset();
                         }
                     }
                     else {
                         if (key === KEYS.down && scope.options.loadOnDownArrow) {
-                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags(), tagsInputCtrl.hasFocus);
                             handled = true;
                         }
                     }

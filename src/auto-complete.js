@@ -68,7 +68,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
             }
             self.visible = true;
         };
-        self.load = tiUtil.debounce(function(query, tags) {
+        self.load = tiUtil.debounce(function(query, tags, hasFocus) {
             self.query = query;
 
             var promise = $q.when(loadFn({ $query: query }));
@@ -83,7 +83,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 items = getDifference(items, tags);
                 self.items = items.slice(0, options.maxResultsToShow);
 
-                if (self.items.length > 0) {
+                if (hasFocus() && self.items.length > 0) {
                     self.show();
                 }
                 else {
@@ -194,13 +194,13 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                     tagsInput.focusInput();
                     added = true;
                 }
-                
+
                 return added;
             };
 
             scope.track = function(item) {
-                return options.tagsInput.keyProperty 
-                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item) 
+                return options.tagsInput.keyProperty
+                    ? tiUtil.getNestedObjectProperty(options.tagsInput.keyProperty, item)
                     : tiUtil.getNestedObjectProperty(options.tagsInput.displayProperty, item);
             };
 
@@ -211,7 +211,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 })
                 .on('input-change', function(value) {
                     if (shouldLoadSuggestions(value) || !suggestionList.visible) {
-                        suggestionList.load(value, tagsInput.getTags());
+                        suggestionList.load(value, tagsInput.getTags(),tagsInputCtrl.hasFocus);
                     }
                     else {
                         suggestionList.reset();
@@ -221,7 +221,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                     var value = tagsInput.getCurrentTagText();
                     if (options.loadOnFocus && shouldLoadSuggestions(value)) {
                       if (!suggestionList.visible ) {
-                        suggestionList.load(value, tagsInput.getTags());
+                        suggestionList.load(value, tagsInput.getTags(), tagsInputCtrl.hasFocus);
                       }else {
                         suggestionList.reset();
                       }
@@ -235,7 +235,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                     if (options.toggleOnClick) {
                         var value = tagsInput.getCurrentTagText();
                         if (!suggestionList.visible) {
-                            suggestionList.load(value, tagsInput.getTags());
+                            suggestionList.load(value, tagsInput.getTags(),tagsInputCtrl.hasFocus);
                         } else {
                             suggestionList.reset();
                         }
@@ -265,14 +265,14 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                         }
                         else if (key === KEYS.enter) {
                             handled = scope.addSuggestion();
-                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags(), tagsInputCtrl.hasFocus);
                         } else if (key === KEYS.tab) {
                             suggestionList.reset();
                         }
                     }
                     else {
                         if (key === KEYS.down && scope.options.loadOnDownArrow) {
-                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags());
+                            suggestionList.load(tagsInput.getCurrentTagText(), tagsInput.getTags(), tagsInputCtrl.hasFocus);
                             handled = true;
                         }
                     }

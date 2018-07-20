@@ -59,7 +59,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
             } else {
                 return '-';
             }
-            
+
         };
 
         setTagText = function(tag, text) {
@@ -152,6 +152,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
     function validateType(type) {
         return SUPPORTED_INPUT_TYPES.indexOf(type) !== -1;
     }
+
+    var _lastFocus = null;
 
     return {
         restrict: 'E',
@@ -248,6 +250,8 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     }
                 };
             };
+
+            this.hasFocus = function () { return $scope.hasFocus; };
         },
         link: function(scope, element, attrs, ngModelCtrl) {
             var hotkeys = [KEYS.enter, KEYS.comma, KEYS.space, KEYS.backspace, KEYS.delete, KEYS.left, KEYS.right],
@@ -313,11 +317,15 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                         events.trigger('input-keydown', $event);
                     },
                     click: function($event) {
+                        if(_lastFocus) _lastFocus.hasFocus = false;
                         scope.hasFocus = true;
+                        _lastFocus = scope;
                         events.trigger('input-click', $event);
                     },
                     focus: function() {
+                        if(_lastFocus) _lastFocus.hasFocus = false;
                         scope.hasFocus = true;
+                        _lastFocus = scope;
                         events.trigger('input-focus');
                     },
                     blur: function() {
@@ -328,6 +336,7 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
 
                             if (lostFocusToBrowserWindow || !lostFocusToChildElement) {
                                 scope.hasFocus = false;
+                                _lastFocus = null;
                                 events.trigger('input-blur');
                             }
                         });
