@@ -47,6 +47,10 @@
  * @param {expression=} [onTagRemoved=NA] Expression to evaluate upon removing an existing tag. The removed tag is
  *    available as $tag.
  * @param {expression=} [onTagClicked=NA] Expression to evaluate upon clicking an existing tag. The clicked tag is available as $tag.
+ * @param {string=} [selectAllText=''] Text display on button to select all suggested items display on autocomplete.
+ *    Button will not by display if the options is not provided or empty string.
+ * @param {string=} [deselectAllText=''] Text display on button to deselect all items in tags-input.
+ *    Button will not by display if the options is not provided or empty string.
  */
 tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInputConfig, tiUtil) {
     function TagList(options, events, onTagAdding, onTagRemoving) {
@@ -198,7 +202,9 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                 allowLeftoverText: [Boolean, false],
                 addFromAutocompleteOnly: [Boolean, false],
                 spellcheck: [Boolean, true],
-                displayValueAsHtml: [Boolean, false]
+                displayValueAsHtml: [Boolean, false],
+                deselectAllText: [String, ''],
+                selectAllText: [String, '']
             });
 
             $scope.$watch(function(){
@@ -361,9 +367,20 @@ tagsInput.directive('tagsInput', function($timeout, $document, $window, tagsInpu
                     click: function(tag) {
                         events.trigger('tag-clicked', { $tag: tag });
                     }
+                },
+                action: {
+                    selectAll: function () {
+                        scope.tagList.items.forEach(function(tag,i){
+                            scope.tagList.add(tag);
+                        },this);
+                    },
+                    deselectAll: function () {
+                        while (scope.tagList.items.length > 0) {
+                            scope.tagList.remove(0);
+                        }
+                    }
                 }
             };
-
             events
                 .on('tag-added', scope.onTagAdded)
                 .on('invalid-tag', scope.onInvalidTag)

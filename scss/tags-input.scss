@@ -76,6 +76,23 @@ tags-input {
       }
     }
 
+    li.deselectAll {
+      display: none;
+      position: absolute;
+      bottom: 8px;
+      right: 4px;
+      font-weight: bold;
+      background: #fff;
+      padding: 0 20px 0 0;
+      &:hover{
+        display: block;
+      }
+    }
+    &:focus-within {
+      li.deselectAll {
+        display: block;
+      }
+    }
   }
 
   &.ng-invalid .tags {

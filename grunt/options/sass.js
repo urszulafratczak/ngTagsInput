@@ -1,8 +1,7 @@
 module.exports = {
     build: {
         options: {
-            style: 'expanded',
-            noCache: true
+            style: 'expanded'
         },
         files: {
             '<%= files.css.main.out %>': ['<%= files.css.main.src %>'],

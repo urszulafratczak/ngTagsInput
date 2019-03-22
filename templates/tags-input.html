@@ -7,12 +7,16 @@
           ng-click="eventHandlers.tag.click(tag)">
         <ti-tag-item data="::tag"></ti-tag-item>
       </li>
+
+      <li ng-if="options.deselectAllText" class="deselectAll" ng-click="eventHandlers.action.deselectAll()">
+        <a> {{options.deselectAllText}} </a>
+      </li>
     </ul>
     <input class="input"
            autocomplete="off"
            ng-model="newTag.text"
            ng-model-options="{getterSetter: true}"
-		   ng-click="eventHandlers.input.click($event)" 
+		   ng-click="eventHandlers.input.click($event)"
            ng-keydown="eventHandlers.input.keydown($event)"
            ng-focus="eventHandlers.input.focus($event)"
            ng-blur="eventHandlers.input.blur($event)"

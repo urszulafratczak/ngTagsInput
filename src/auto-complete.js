@@ -29,6 +29,8 @@
  *    is clicked
  * @param {boolean=} [selectFirstMatch=true] Flag indicating that the first match will be automatically selected once
  *    the suggestion list is shown.
+ * @param {string=} [selectAllText=''] Text display on button to select all suggested items display on autocomplete.
+ *    Button will not by display if the options is not provided or empty string.
  */
 tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tagsInputConfig, tiUtil) {
     function SuggestionList(loadFn, options, events) {
@@ -150,6 +152,7 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
                 loadOnFocus: [Boolean, false],
                 toggleOnClick: [Boolean, false],
                 selectFirstMatch: [Boolean, true],
+                selectAllText: [String, ''],
                 displayProperty: [String, '']
             });
 
@@ -183,6 +186,14 @@ tagsInput.directive('autoComplete', function($document, $timeout, $sce, $q, tags
             scope.addSuggestionByIndex = function(index) {
                 suggestionList.select(index);
                 scope.addSuggestion();
+            };
+
+            scope.selectAll = function(){
+                suggestionList.items.forEach(function(suggestion, idx){
+                    tagsInput.addTag(angular.copy(suggestion));
+                });
+                suggestionList.reset();
+                tagsInput.focusInput();
             };
 
             scope.addSuggestion = function() {

@@ -46,4 +46,11 @@ tags-input .autocomplete {
       background-color: $suggestion-highlight-bgcolor;
     }
   }
+
+  .selectAll {
+    position: absolute;
+    top: 6px;
+    right: 24px;
+    font-weight: bold;
+  }
 }

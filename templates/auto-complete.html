@@ -8,4 +8,7 @@
       <ti-autocomplete-match data="::item"></ti-autocomplete-match>
     </li>
   </ul>
+  <span ng-if="options.selectAllText || options.tagsInput.selectAllText" class="selectAll" ng-click="selectAll()">
+    <a>{{options.selectAllText || options.tagsInput.selectAllText}}</a>
+  </span>
 </div>
