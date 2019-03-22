@@ -8,7 +8,7 @@
         <ti-tag-item data="::tag"></ti-tag-item>
       </li>
 
-      <li ng-if="options.deselectAllText" class="deselectAll" ng-click="eventHandlers.action.deselectAll()">
+      <li ng-if="options.deselectAllText && tagList.items.length > 0" class="deselectAll" ng-click="eventHandlers.action.deselectAll()">
         <a> {{options.deselectAllText}} </a>
       </li>
     </ul>
