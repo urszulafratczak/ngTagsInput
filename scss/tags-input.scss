@@ -80,10 +80,10 @@ tags-input {
       display: none;
       position: absolute;
       bottom: 8px;
-      right: 4px;
+      right: 8px;
       font-weight: bold;
-      background: #fff;
-      padding: 0 20px 0 0;
+      background: transparentize( #fff, 0.3);
+      padding: 0 16px 0 0;
       &:hover{
         display: block;
       }

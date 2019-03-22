@@ -89,10 +89,10 @@ tags-input .tags li.deselectAll {
   display: none;
   position: absolute;
   bottom: 8px;
-  right: 4px;
+  right: 8px;
   font-weight: bold;
-  background: #fff;
-  padding: 0 20px 0 0;
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0 16px 0 0;
 }
 tags-input .tags li.deselectAll:hover {
   display: block;
@@ -172,8 +172,9 @@ tags-input .autocomplete .suggestion-item em {
   background-color: #fff;
 }
 tags-input .autocomplete .selectAll {
+  background: rgba(255, 255, 255, 0.7);
   position: absolute;
-  top: 6px;
+  top: 11px;
   right: 24px;
   font-weight: bold;
 }

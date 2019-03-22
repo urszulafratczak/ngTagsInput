@@ -48,8 +48,9 @@ tags-input .autocomplete {
   }
 
   .selectAll {
+    background: transparentize( #fff, 0.3);
     position: absolute;
-    top: 6px;
+    top: 11px;
     right: 24px;
     font-weight: bold;
   }
