@@ -5,7 +5,7 @@
  * Copyright (c) 2013-2019 Michael Benford
  * License: MIT
  *
- * Generated at 2019-03-22 12:21:13 +0100
+ * Generated at 2019-05-30 07:58:37 +0200
  */
 (function() {
 'use strict';
@@ -1242,7 +1242,7 @@ tagsInput.run(["$templateCache", function($templateCache) {
   'use strict';
 
   $templateCache.put('ngTagsInput/tags-input.html',
-    "<div class=\"host\" tabindex=\"-1\" ng-click=\"eventHandlers.host.click()\" ti-transclude-append><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" ng-click=\"eventHandlers.tag.click(tag)\"><ti-tag-item data=\"::tag\"></ti-tag-item></li><li ng-if=\"options.deselectAllText && tagList.items.length > 0\" class=\"deselectAll\" ng-click=\"eventHandlers.action.deselectAll()\"><a>{{options.deselectAllText}}</a></li></ul><input class=\"input\" autocomplete=\"off\" ng-model=\"newTag.text\" ng-model-options=\"{getterSetter: true}\" ng-click=\"eventHandlers.input.click($event)\" ng-keydown=\"eventHandlers.input.keydown($event)\" ng-focus=\"eventHandlers.input.focus($event)\" ng-blur=\"eventHandlers.input.blur($event)\" ng-paste=\"eventHandlers.input.paste($event)\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ng-disabled=\"disabled\" ti-bind-attrs=\"{type: options.type, placeholder: options.placeholder, tabindex: options.tabindex, spellcheck: options.spellcheck}\" ti-autosize></div></div>"
+    "<div class=\"host\" tabindex=\"-1\" ng-click=\"eventHandlers.host.click()\" ti-transclude-append><div class=\"tags\" ng-class=\"{focused: hasFocus}\"><ul class=\"tag-list\"><li class=\"tag-item\" ng-repeat=\"tag in tagList.items track by track(tag)\" ng-class=\"{ selected: tag == tagList.selected }\" ng-click=\"eventHandlers.tag.click(tag)\"><ti-tag-item data=\"::tag\"></ti-tag-item></li><li><input class=\"input\" autocomplete=\"off\" ng-model=\"newTag.text\" ng-model-options=\"{getterSetter: true}\" ng-click=\"eventHandlers.input.click($event)\" ng-keydown=\"eventHandlers.input.keydown($event)\" ng-focus=\"eventHandlers.input.focus($event)\" ng-blur=\"eventHandlers.input.blur($event)\" ng-paste=\"eventHandlers.input.paste($event)\" ng-trim=\"false\" ng-class=\"{'invalid-tag': newTag.invalid}\" ng-disabled=\"disabled\" ti-bind-attrs=\"{type: options.type, placeholder: options.placeholder, tabindex: options.tabindex, spellcheck: options.spellcheck}\" ti-autosize></li><li class=\"tag-item deselectAllPlaceholder\" ng-if=\"options.selectAllText && tagList.items.length > 0\"><!-- Item to seserv space for deselectAll -->{{options.deselectAllText}}</li><li ng-if=\"options.selectAllText && tagList.items.length > 0\" class=\"deselectAll\" ng-click=\"eventHandlers.action.deselectAll()\"><a>{{options.deselectAllText}}</a></li></ul></div></div>"
   );
 
 
@@ -1252,7 +1252,7 @@ tagsInput.run(["$templateCache", function($templateCache) {
 
 
   $templateCache.put('ngTagsInput/auto-complete.html',
-    "<div class=\"autocomplete\" ng-if=\"suggestionList.visible\"><ul class=\"suggestion-list\"><li class=\"suggestion-item\" ng-repeat=\"item in suggestionList.items track by track(item)\" ng-class=\"{selected: item == suggestionList.selected}\" ng-click=\"addSuggestionByIndex($index)\" ng-mouseenter=\"suggestionList.select($index)\"><ti-autocomplete-match data=\"::item\"></ti-autocomplete-match></li></ul><span ng-if=\"options.selectAllText || options.tagsInput.selectAllText && suggestionList.items .length > 0\" class=\"selectAll\" ng-click=\"selectAll()\"><a>{{options.selectAllText || options.tagsInput.selectAllText}}</a></span></div>"
+    "<div class=\"autocomplete\" ng-if=\"suggestionList.visible\"><ul class=\"suggestion-list\"><li class=\"suggestion-item\" ng-repeat=\"item in suggestionList.items track by track(item)\" ng-class=\"{selected: item == suggestionList.selected}\" ng-click=\"addSuggestionByIndex($index)\" ng-mouseenter=\"suggestionList.select($index)\"><ti-autocomplete-match data=\"::item\"></ti-autocomplete-match></li><li class=\"suggestion-item selectAllPlaceholder\" ng-if=\"options.selectAllText || options.tagsInput.selectAllText && suggestionList.items.length > 0\">{{options.selectAllText || options.tagsInput.selectAllText}}</li></ul><span ng-if=\"options.selectAllText || options.tagsInput.selectAllText && suggestionList.items.length > 0\" class=\"selectAll\" ng-click=\"selectAll()\"><a>{{options.selectAllText || options.tagsInput.selectAllText}}</a></span></div>"
   );
 
 

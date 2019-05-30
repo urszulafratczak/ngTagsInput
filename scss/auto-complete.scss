@@ -50,8 +50,12 @@ tags-input .autocomplete {
   .selectAll {
     background: transparentize( #fff, 0.3);
     position: absolute;
-    top: 11px;
+    bottom: 12px;
     right: 24px;
     font-weight: bold;
+  }
+  li.suggestion-item.selectAllPlaceholder {
+    color: transparent;
+    background-color: transparent;
   }
 }

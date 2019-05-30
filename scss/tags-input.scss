@@ -17,6 +17,13 @@ tags-input {
     &.focused {
       outline: none;
       @include box-shadow($tags-outline-box-shadow);
+
+      li.deselectAll {
+        display: block;
+      }
+      li.deselectAllPlaceholder{
+        display: inline-block;
+      }
     }
 
     .tag-list {
@@ -88,10 +95,11 @@ tags-input {
         display: block;
       }
     }
-    &:focus-within {
-      li.deselectAll {
-        display: block;
-      }
+
+    li.deselectAllPlaceholder {
+      display: none;
+      color: transparent;
+      background-color: transparent;
     }
   }
 

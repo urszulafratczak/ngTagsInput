@@ -34,6 +34,12 @@ tags-input .tags.focused {
   -moz-box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
   box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
 }
+tags-input .tags.focused li.deselectAll {
+  display: block;
+}
+tags-input .tags.focused li.deselectAllPlaceholder {
+  display: inline-block;
+}
 tags-input .tags .tag-list {
   margin: 0;
   padding: 0;
@@ -97,8 +103,10 @@ tags-input .tags li.deselectAll {
 tags-input .tags li.deselectAll:hover {
   display: block;
 }
-tags-input .tags:focus-within li.deselectAll {
-  display: block;
+tags-input .tags li.deselectAllPlaceholder {
+  display: none;
+  color: transparent;
+  background-color: transparent;
 }
 tags-input.ng-invalid .tags {
   -webkit-box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
@@ -174,9 +182,13 @@ tags-input .autocomplete .suggestion-item em {
 tags-input .autocomplete .selectAll {
   background: rgba(255, 255, 255, 0.7);
   position: absolute;
-  top: 11px;
+  bottom: 12px;
   right: 24px;
   font-weight: bold;
+}
+tags-input .autocomplete li.suggestion-item.selectAllPlaceholder {
+  color: transparent;
+  background-color: transparent;
 }
 
 /*# sourceMappingURL=ng-tags-input.css.map */
